@@ -1,6 +1,17 @@
-package goui_map_creator
+package mapCreator
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/ygto/goui"
+	"github.com/ygto/goui/entity"
+)
+
+const (
+	TILE_WALL   = iota
+	TILE_ROAD   = iota
+	TILE_GOAL   = iota
+	TILE_DANGER = iota
+)
 
 type Map2D struct {
 	x     int
@@ -8,14 +19,19 @@ type Map2D struct {
 	nodes []*Node
 }
 
-func NewMap2D(s *Schema) *Map2D {
+func NewMap2D(s *Schema, scene *goui.Scene, tileSize int) *Map2D {
 	m := new(Map2D)
 	m.nodes = make([]*Node, 0, 0)
 	m.y = s.GetY()
 	m.x = s.GetX()
 	for y := 0; y < m.y; y++ {
 		for x := 0; x < m.x; x++ {
-			m.nodes = append(m.nodes, NewNode(fmt.Sprintf("m-%d-%d", y, x), s.GetSchema(y, x)))
+			node := NewNode(fmt.Sprintf("m-%d:%d", y, x), s.GetSchema(y, x))
+			rect := entity.CreateRectangle(float32(x*tileSize), float32(y*tileSize), float32(tileSize), float32(tileSize))
+			rect.SetColor(GetColor(node.GetNodeType()))
+			scene.AddEntity(rect)
+			node.SetEntity(rect)
+			m.nodes = append(m.nodes, node)
 		}
 	}
 	for y := 0; y < m.y; y++ {

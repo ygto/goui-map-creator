@@ -1,4 +1,4 @@
-package goui_map_creator
+package mapCreator
 
 type Schema struct {
 	y      int

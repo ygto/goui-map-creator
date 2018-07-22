@@ -1,4 +1,4 @@
-package goui_map_creator
+package mapCreator
 
 import "github.com/ygto/goui/entity"
 
